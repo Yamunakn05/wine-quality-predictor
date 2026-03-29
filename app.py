@@ -104,7 +104,7 @@ pH = st.slider("pH",float(df["pH"].min()),float(df["pH"].max()))
 sulphates = st.slider("Sulphates",float(df["sulphates"].min()),float(df["sulphates"].max()))
 
 # Create input
-    input_df = pd.DataFrame([{
+input_df = pd.DataFrame([{
     "fixed acidity": fixed_acidity,
     "volatile acidity": volatile_acidity,
     "citric acid": citric_acid,
