@@ -24,7 +24,7 @@ This is a Machine Learning web app that predicts whether a wine is of good or ba
 
  
 ## 📂 Dataset
-WineQT.csv is used for training the model.
+wine.csv is used for training the model.
 
 ## Made with
 Machine Learning + Streamlit
