@@ -94,14 +94,19 @@ with col3:
     alcohol = st.slider("Alcohol", float(df["alcohol"].min()), float(df["alcohol"].max()))
 
 # Create input
-input_data = np.array([[fixed_acidity, volatile_acidity, citric_acid,
-                        residual_sugar, chlorides, alcohol]])
+input_data = np.array([[fixed_acidity,
+                        volatile_acidity,
+                        citric_acid,
+                        residual_sugar,
+                        chlorides,
+                        free_sulfur_dioxide,
+                        total_sulfur_dioxide,
+                        density,
+                        pH,
+                        sulphates,
+                        alcohol]])
 
-# Fix feature size 
-input_full = np.zeros((1, X.shape[1]))
-input_full[0, :6] = input_data
-
-input_scaled = scaler.transform(input_full)
+input_scaled = scaler.transform(input_data)
 
 # PREDICTION
 if st.button("Predict Quality"):
