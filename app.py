@@ -41,7 +41,7 @@ with col2:
     st.pyplot(fig2)
 
 # PREPROCESSING
-X = df.drop("quality", axis=1)
+X = df.drop(["quality", "Id"], axis=1, errors="ignore")
 y = df["quality"].apply(lambda x: 1 if x >= 7 else 0)
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
