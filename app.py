@@ -92,6 +92,35 @@ with col2:
 with col3:
     chlorides = st.slider("Chlorides", float(df["chlorides"].min()), float(df["chlorides"].max()))
     alcohol = st.slider("Alcohol", float(df["alcohol"].min()), float(df["alcohol"].max()))
+    free_sulfur_dioxide = st.slider(
+    "Free Sulfur Dioxide",
+    float(df["free sulfur dioxide"].min()),
+    float(df["free sulfur dioxide"].max())
+)
+
+total_sulfur_dioxide = st.slider(
+    "Total Sulfur Dioxide",
+    float(df["total sulfur dioxide"].min()),
+    float(df["total sulfur dioxide"].max())
+)
+
+density = st.slider(
+    "Density",
+    float(df["density"].min()),
+    float(df["density"].max())
+)
+
+pH = st.slider(
+    "pH",
+    float(df["pH"].min()),
+    float(df["pH"].max())
+)
+
+sulphates = st.slider(
+    "Sulphates",
+    float(df["sulphates"].min()),
+    float(df["sulphates"].max())
+)
 
 # Create input
 input_data = np.array([[fixed_acidity,
