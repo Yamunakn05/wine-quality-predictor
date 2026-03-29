@@ -57,6 +57,8 @@ lr.fit(X_train, y_train)
 knn = KNeighborsClassifier()
 knn.fit(X_train, y_train)
 
+feature_names = X.columns
+
 # MODEL PERFORMANCE
 st.subheader("Model Performance")
 
@@ -104,19 +106,18 @@ pH = st.slider("pH",float(df["pH"].min()),float(df["pH"].max()))
 sulphates = st.slider("Sulphates",float(df["sulphates"].min()),float(df["sulphates"].max()))
 
 # Create input
-input_df = pd.DataFrame([{
-    "fixed acidity": fixed_acidity,
-    "volatile acidity": volatile_acidity,
-    "citric acid": citric_acid,
-    "residual sugar": residual_sugar,
-    "chlorides": chlorides,
-    "free sulfur dioxide": free_sulfur_dioxide,
-    "total sulfur dioxide": total_sulfur_dioxide,
-    "density": density,
-    "pH": pH,
-    "sulphates": sulphates,
-    "alcohol": alcohol
-}])
+input_df = pd.DataFrame([[fixed_acidity,
+                          volatile_acidity,
+                          citric_acid,
+                          residual_sugar,
+                          chlorides,
+                          free_sulfur_dioxide,
+                          total_sulfur_dioxide,
+                          density,
+                          pH,
+                          sulphates,
+                          alcohol]],
+                        columns=feature_names)
 
 input_scaled = scaler.transform(input_df)
 # PREDICTION
