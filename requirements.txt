@@ -1,6 +1,6 @@
-1.pandas
-2.numpy
-3matplotlib
-4.seaborn
-5.scikit-learn
-6.streamlit
+streamlit
+pandas
+numpy
+matplotlib
+seaborn
+scikit-learn
