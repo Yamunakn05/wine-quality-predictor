@@ -94,8 +94,15 @@ if st.button("Predict Quality"):
 
 st.subheader("🔗 Feature Correlation Insights")
 
-fig, ax = plt.subplots()
-sns.heatmap(df[features].corr(), annot=True, cmap="coolwarm", ax=ax)
+fig, ax = plt.subplots(figsize=(6, 4))
+sns.heatmap(
+    df[features].corr(),
+    annot=True,
+    cmap="coolwarm",
+    fmt=".2f",
+    annot_kws={"size": 8},
+    ax=ax
+)
 st.pyplot(fig)
 
 st.write("---")
