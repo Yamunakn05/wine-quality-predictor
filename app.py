@@ -1,6 +1,3 @@
-# =========================
-# IMPORT LIBRARIES
-# =========================
 import pandas as pd
 import streamlit as st
 import matplotlib.pyplot as plt
@@ -15,56 +12,42 @@ from sklearn.ensemble import RandomForestClassifier
 
 from imblearn.over_sampling import SMOTE
 
-# =========================
-# PAGE SETTINGS
-# =========================
-st.set_page_config(page_title="Unbiased Wine Predictor 🍷", layout="wide")
-st.title("🍷 Unbiased Wine Quality Predictor")
+st.set_page_config(page_title="Wine Intelligence System 🍷", layout="wide")
 
-# =========================
-# LOAD DATA
-# =========================
+st.title("🍷 Intelligent Wine Quality Prediction System")
+
 df = pd.read_csv("wine.csv")
 
-# =========================
-# IMPORTANT FEATURES
-# =========================
+st.subheader("📂 Data Overview")
+st.dataframe(df.head())
+
 features = ["alcohol", "volatile acidity", "sulphates", "density", "citric acid"]
 
 X = df[features]
 y = df["quality"].apply(lambda x: 1 if x >= 7 else 0)
 
-# =========================
-# TRAIN TEST SPLIT
-# =========================
+st.subheader("⚖️ Quality Distribution Analysis")
+st.write(y.value_counts())
+
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42, stratify=y
 )
 
-# =========================
-# APPLY SMOTE (🔥 KEY FIX)
-# =========================
 sm = SMOTE(random_state=42)
 X_train, y_train = sm.fit_resample(X_train, y_train)
 
-# =========================
-# SCALING
-# =========================
 scaler = StandardScaler()
 X_train = scaler.fit_transform(X_train)
 X_test = scaler.transform(X_test)
 
-# =========================
-# MODEL SELECTION
-# =========================
-st.sidebar.title("Model Settings")
+st.sidebar.title("⚙️ Model Control Panel")
 
 model_option = st.sidebar.selectbox(
-    "Choose Model",
+    "Select Algorithm",
     ["Logistic Regression", "KNN", "Random Forest"]
 )
 
-threshold = st.sidebar.slider("Decision Threshold", 0.1, 0.9, 0.4)
+threshold = st.sidebar.slider("Prediction Threshold", 0.1, 0.9, 0.4)
 
 if model_option == "Logistic Regression":
     model = LogisticRegression(class_weight='balanced')
@@ -75,21 +58,16 @@ else:
 
 model.fit(X_train, y_train)
 
-# =========================
-# PERFORMANCE
-# =========================
-st.subheader("Model Evaluation")
+st.subheader("🧠 Model Performance Analysis")
 
-y_prob = model.predict_proba(X_test)[:,1]
+y_prob = model.predict_proba(X_test)[:, 1]
 y_pred = (y_prob > threshold).astype(int)
 
+st.subheader("📊 Evaluation Metrics")
 st.write("Accuracy:", round(accuracy_score(y_test, y_pred), 2))
 st.text(classification_report(y_test, y_pred))
 
-# =========================
-# INPUT
-# =========================
-st.subheader("Enter Wine Details")
+st.subheader("🧪 Input Wine Characteristics")
 
 input_data = {}
 for col in features:
@@ -102,30 +80,23 @@ for col in features:
 input_df = pd.DataFrame([input_data])
 input_scaled = scaler.transform(input_df)
 
-# =========================
-# PREDICTION
-# =========================
-if st.button("Predict"):
+st.subheader("🔮 Prediction Outcome")
+
+if st.button("Predict Quality"):
     prob = model.predict_proba(input_scaled)[0][1]
 
-    st.write(f"Prediction Probability: {prob:.2f}")
+    st.write(f"Prediction Confidence: {prob:.2f}")
 
     if prob > threshold:
-        st.success("✅ Good Quality Wine")
+        st.success("✅ High Quality Wine Detected")
     else:
-        st.error("❌ Bad Quality Wine")
+        st.error("❌ Low Quality Wine Detected")
 
-# =========================
-# VISUALIZATION
-# =========================
-st.subheader("Feature Correlation")
+st.subheader("🔗 Feature Correlation Insights")
 
 fig, ax = plt.subplots()
 sns.heatmap(df[features].corr(), annot=True, cmap="coolwarm", ax=ax)
 st.pyplot(fig)
 
-# =========================
-# FOOTER
-# =========================
 st.write("---")
-st.write("Built with SMOTE + Threshold Tuning for Unbiased Predictions 🚀")
+st.markdown("### 🚀 Developed using Machine Learning & Streamlit")
