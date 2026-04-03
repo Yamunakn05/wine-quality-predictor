@@ -2,50 +2,45 @@
 # IMPORT LIBRARIES
 # =========================
 import pandas as pd
-import numpy as np
 import streamlit as st
 import matplotlib.pyplot as plt
 import seaborn as sns
 
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+from sklearn.linear_model import LogisticRegression
+from sklearn.neighbors import KNeighborsClassifier
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
 from sklearn.utils import resample
 
 # =========================
 # PAGE SETTINGS
 # =========================
 st.set_page_config(page_title="Wine Quality Predictor 🍷", layout="wide")
-st.title("🍷 Wine Quality Prediction System")
-st.write("Predict whether a wine is **Good** or **Bad** using Machine Learning")
+st.title("🍷 Wine Quality Predictor (Optimized Model)")
 
 # =========================
 # LOAD DATA
 # =========================
 df = pd.read_csv("wine.csv")
 
-st.subheader("Dataset Preview")
-st.dataframe(df.head())
+# =========================
+# USE ONLY IMPORTANT FEATURES
+# =========================
+features = ["alcohol", "volatile acidity", "sulphates", "density", "citric acid"]
 
-# =========================
-# SHOW CLASS DISTRIBUTION
-# =========================
-st.subheader("Class Distribution (Before Balancing)")
-st.write(df["quality"].value_counts())
-
-# =========================
-# PREPROCESSING + BALANCING
-# =========================
-X = df.drop(["quality", "Id"], axis=1, errors="ignore")
+X = df[features]
 y = df["quality"].apply(lambda x: 1 if x >= 7 else 0)
 
+# =========================
+# BALANCE DATASET
+# =========================
 df_combined = pd.concat([X, y], axis=1)
 
 df_majority = df_combined[df_combined["quality"] == 0]
 df_minority = df_combined[df_combined["quality"] == 1]
 
-# Upsample minority
 df_minority_upsampled = resample(
     df_minority,
     replace=True,
@@ -55,88 +50,70 @@ df_minority_upsampled = resample(
 
 df_balanced = pd.concat([df_majority, df_minority_upsampled])
 
-# Show balanced distribution
-st.subheader("Class Distribution (After Balancing)")
-st.write(df_balanced["quality"].value_counts())
-
-# Split
-X = df_balanced.drop("quality", axis=1)
+X = df_balanced[features]
 y = df_balanced["quality"]
 
+# =========================
+# SPLIT + SCALE
+# =========================
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42
 )
 
-# Scaling
 scaler = StandardScaler()
 X_train = scaler.fit_transform(X_train)
 X_test = scaler.transform(X_test)
 
 # =========================
-# MODEL TRAINING
+# MODEL SELECTION
 # =========================
-model = RandomForestClassifier(
-    n_estimators=200,
-    max_depth=10,
-    class_weight='balanced',
-    random_state=42
+st.sidebar.title("Choose Model")
+
+model_option = st.sidebar.selectbox(
+    "Select Model",
+    ["Logistic Regression", "KNN", "Random Forest"]
 )
 
+if model_option == "Logistic Regression":
+    model = LogisticRegression()
+elif model_option == "KNN":
+    model = KNeighborsClassifier(n_neighbors=5)
+else:
+    model = RandomForestClassifier(n_estimators=150, class_weight='balanced')
+
+# Train
 model.fit(X_train, y_train)
 
 # =========================
-# MODEL PERFORMANCE
+# PERFORMANCE
 # =========================
-st.subheader("Model Performance")
+st.subheader("Model Accuracy")
 
 y_pred = model.predict(X_test)
+acc = accuracy_score(y_test, y_pred)
 
-accuracy = accuracy_score(y_test, y_pred)
-st.write(f"Accuracy: {accuracy:.2f}")
-
-st.text("Classification Report")
-st.text(classification_report(y_test, y_pred))
+st.write(f"Accuracy: {acc:.2f}")
 
 # =========================
-# CONFUSION MATRIX
+# INPUT SLIDERS (ONLY 5 NOW)
 # =========================
-st.subheader("Confusion Matrix")
+st.subheader("Enter Wine Details")
 
-cm = confusion_matrix(y_test, y_pred)
-fig, ax = plt.subplots()
-sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', ax=ax)
-st.pyplot(fig)
+alcohol = st.slider("Alcohol", float(df["alcohol"].min()), float(df["alcohol"].max()))
+volatile_acidity = st.slider("Volatile Acidity", float(df["volatile acidity"].min()), float(df["volatile acidity"].max()))
+sulphates = st.slider("Sulphates", float(df["sulphates"].min()), float(df["sulphates"].max()))
+density = st.slider("Density", float(df["density"].min()), float(df["density"].max()))
+citric_acid = st.slider("Citric Acid", float(df["citric acid"].min()), float(df["citric acid"].max()))
 
-# =========================
-# FEATURE IMPORTANCE
-# =========================
-st.subheader("Feature Importance")
+# Create input
+input_df = pd.DataFrame([[
+    alcohol,
+    volatile_acidity,
+    sulphates,
+    density,
+    citric_acid
+]], columns=features)
 
-importance = model.feature_importances_
-feat_df = pd.DataFrame({
-    "Feature": X.columns,
-    "Importance": importance
-}).sort_values(by="Importance", ascending=False)
-
-fig2, ax2 = plt.subplots()
-sns.barplot(x="Importance", y="Feature", data=feat_df, ax=ax2)
-st.pyplot(fig2)
-
-# =========================
-# USER INPUT
-# =========================
-st.subheader("Predict Wine Quality")
-
-input_data = {}
-
-for col in X.columns:
-    input_data[col] = st.slider(
-        col,
-        float(df[col].min()),
-        float(df[col].max())
-    )
-
-input_df = pd.DataFrame([input_data])
 input_scaled = scaler.transform(input_df)
 
 # =========================
@@ -145,14 +122,23 @@ input_scaled = scaler.transform(input_df)
 if st.button("Predict Quality"):
     prob = model.predict_proba(input_scaled)[0][1]
 
-    # Adjusted threshold
-    if prob > 0.35:
-        st.success(f"✅ Good Quality Wine ({prob*100:.2f}% confidence)")
+    if prob > 0.4:
+        st.success(f"✅ Good Quality Wine ({prob*100:.2f}%)")
     else:
-        st.error(f"❌ Bad Quality Wine ({(1-prob)*100:.2f}% confidence)")
+        st.error(f"❌ Bad Quality Wine ({(1-prob)*100:.2f}%)")
+
+# =========================
+# SIMPLE VISUALIZATION
+# =========================
+st.subheader("Feature Impact")
+
+fig, ax = plt.subplots()
+sns.barplot(x=features, y=df[features].mean(), ax=ax)
+plt.xticks(rotation=30)
+st.pyplot(fig)
 
 # =========================
 # FOOTER
 # =========================
 st.write("---")
-st.write("Built with ❤️ using Streamlit & Machine Learning")
+st.write("Optimized ML Model using Important Features 🍷")
