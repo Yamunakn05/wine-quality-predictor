@@ -15,7 +15,7 @@ This is a Machine Learning web app that predicts whether a wine is of good or ba
 - Scikit-learn  
 - Streamlit  
 - Matplotlib & Seaborn
--
+- Imblearn
 
 ## ▶️ How to Run
 1. Install requirements:
@@ -37,11 +37,11 @@ Displays prediction probability
 
 
 ## 💡 Key Concepts Used
-Data Preprocessing
-Feature Selection
-SMOTE (Handling Imbalanced Data)
-Classification Models
-Threshold Tuning
+- Data Preprocessing
+- Feature Selection
+- SMOTE (Handling Imbalanced Data)
+- Classification Models
+- Threshold Tuning
 
 ## 👨‍💻 Author
 Yamuna K N
