@@ -32,8 +32,8 @@ wine.csv is used for training the model.
 (Add your screenshots here)
 
 ## 🎯 Output
-Predicts Wine Quality (Good / Bad)
-Displays prediction probability
+- Predicts Wine Quality (Good / Bad)
+- Displays prediction probability
 
 
 ## 💡 Key Concepts Used
