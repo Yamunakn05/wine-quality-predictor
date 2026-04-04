@@ -106,4 +106,4 @@ sns.heatmap(
 st.pyplot(fig)
 
 st.write("---")
-st.markdown("🚀 Developed using Machine Learning & Streamlit")
+st.markdown("###🚀 Developed using Machine Learning & Streamlit")
