@@ -53,7 +53,7 @@ if model_option == "Logistic Regression":
     model = LogisticRegression(class_weight='balanced', max_iter=1000)
 
 elif model_option == "KNN":
-    model = KNeighborsClassifier( n_neighbors=9,weights='distance' )
+    model = KNeighborsClassifier( n_neighbors=15,weights='distance',metric='manhattan')
 
 else:
     model = RandomForestClassifier(n_estimators=300,max_depth=12,min_samples_split=5,class_weight='balanced',random_state=42  )
@@ -83,7 +83,7 @@ if st.button("Predict"):
     prob = model.predict_proba(input_scaled)[0][1]
     st.write(f"Prediction Probability: {prob:.2f}")
     if model_option == "KNN":
-        threshold_used = 0.35
+        threshold_used = 0.25
     elif model_option == "Random Forest":
         threshold_used = 0.4
     else:
