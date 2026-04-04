@@ -14,7 +14,8 @@ This is a Machine Learning web app that predicts whether a wine is of good or ba
 - Pandas  
 - Scikit-learn  
 - Streamlit  
-- Matplotlib & Seaborn  
+- Matplotlib & Seaborn
+-
 
 ## ▶️ How to Run
 1. Install requirements:
@@ -26,5 +27,24 @@ This is a Machine Learning web app that predicts whether a wine is of good or ba
 ## 📂 Dataset
 wine.csv is used for training the model.
 
-## Made with
+## 📸 Screenshots
+
+(Add your screenshots here)
+
+## 🎯 Output
+Predicts Wine Quality (Good / Bad)
+Displays prediction probability
+
+
+## 💡 Key Concepts Used
+Data Preprocessing
+Feature Selection
+SMOTE (Handling Imbalanced Data)
+Classification Models
+Threshold Tuning
+
+## 👨‍💻 Author
+Yamuna K N
+
+## 🚀 Made with
 Machine Learning + Streamlit
