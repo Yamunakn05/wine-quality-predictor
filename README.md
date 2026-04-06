@@ -44,6 +44,8 @@ wine.csv is used for training the model.
 ### ❌ Bad Quality Prediction
 ![Bad](screenshots/badquality.png)
 
+## 🌐 Live Demo
+[Click here to try the app](https://wine-quality-predictor-caemz3g6ucgsmauwvsmpv5.streamlit.app/)
 
 ## 🎯 Output
 - Predicts Wine Quality (Good / Bad)
