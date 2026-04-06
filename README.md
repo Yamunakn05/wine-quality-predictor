@@ -29,7 +29,21 @@ wine.csv is used for training the model.
 
 ## 📸 Screenshots
 
-(Add your screenshots here)
+### 🏠 Home Interface
+![Home](screenshots/home.png)
+
+### ⚙️ Model Selection
+![Model](screenshots/model.png)
+
+### 📊 Heatmap
+![Heatmap](screenshots/heatmap.png)
+
+### ✅ Good Quality Prediction
+![Good](screenshots/goodquality.png)
+
+### ❌ Bad Quality Prediction
+![Bad](screenshots/badquality.png)
+
 
 ## 🎯 Output
 - Predicts Wine Quality (Good / Bad)
